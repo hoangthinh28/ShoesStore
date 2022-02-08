@@ -90,9 +90,10 @@ exports.getProducts = (req, res, next) => {
 //delete product
 exports.postDeleteProduct = (req, res, next) => {
     const prodId = req.body.productId;
-    Product.deleteById(prodId)
-        .then(() => {
+    Product.findByIdAndRemove(prodId) //remove id product in database
+        .then((rs) => {
             console.log("DELETE SUCCESS");
+            console.log(rs);
             res.redirect("/admin/products");
         })
         .catch((err) => console.log(err));
