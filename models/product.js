@@ -20,7 +20,7 @@ const productSchema = new Schema({
         required: true
     },
     userId: {
-        type: Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId, // Object id user
         ref: 'User', //relation model User
         required: true
     }

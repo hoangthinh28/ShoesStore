@@ -18,7 +18,7 @@ exports.postAddProduct = (req, res, next) => {
         price: price,
         description: description,
         imageUrl: imageURL,
-        userId: req.user
+        userId: req.user // Information User to take Object User ID
     });
     product
         .save() //Creating data in model
@@ -78,6 +78,8 @@ exports.postEditProduct = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
     Product.find()
+        // .select("title price -_id") // select các trưỜng trong database
+        // .populate('userId') //Join các document từ các collections khác
         .then((products) => {
             res.render("admin/products", {
                 prods: products,

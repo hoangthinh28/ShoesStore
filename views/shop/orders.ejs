@@ -6,23 +6,25 @@
             <main>
                 <% if (orders.length <= 0) { %>
                     <h1>Nothing here!</h1>
-                <% } else { %>
-                    <ul>
-                        <% orders.forEach(order=> { %>
-                            <li>
-                                <h1># <%= order._id %>
-                                </h1>
-                                <ul>
-                                    <% order.items.forEach(product=> { %>
-                                        <li>
-                                            <%= product.title %> (<%= product.quantity %>)
-                                            $<%= product.price * product.quantity %> 
-                                        </li>
-                                    <% }); %>
-                                </ul>
-                            </li>
-                        <% }); %>
-                    </ul>
-                <% } %>
+                    <% } else { %>
+                        <ul>
+                            <% orders.forEach(order=> { %>
+                                <li>
+                                    <h1>#
+                                        <%= order._id %>
+                                    </h1>
+                                    <ul>
+                                        <% order.products.forEach(p=> { %>
+                                            <li>
+                                                <%= p.product.title %> (
+                                                    <%= p.quantity %>) $
+                                                        <%= p.product.price * p.quantity %>
+                                            </li>
+                                            <% }); %>
+                                    </ul>
+                                </li>
+                                <% }); %>
+                        </ul>
+                        <% } %>
             </main>
             <%- include('../includes/end.ejs') %>
