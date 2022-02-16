@@ -10,6 +10,7 @@ exports.getProducts = (req, res, next) => {
                 prods: products,
                 docTitle: "All Products",
                 path: "/products",
+                isAuthenticated: req.isLoggedIn
             })
         })
         .catch((err) => console.log(err));
@@ -26,6 +27,7 @@ exports.getProduct = (req, res, next) => {
                 product: product,
                 docTitle: product.title,
                 path: "/products",
+                isAuthenticated: req.isLoggedIn
             });
         })
         .catch((err) => console.log(err));
@@ -38,6 +40,7 @@ exports.getIndex = (req, res, next) => {
                 prods: products,
                 docTitle: "Shop",
                 path: "/",
+                isAuthenticated: req.isLoggedIn
             }); // render file shop.hbs
         })
         .catch((err) => console.log(err));
@@ -52,7 +55,8 @@ exports.getCart = (req, res, next) => {
             res.render('shop/cart', {
                 path: '/cart',
                 docTitle: 'Your Cart',
-                products: products
+                products: products,
+                isAuthenticated: req.isLoggedIn
             });
         })
         .catch(err => console.log(err));
@@ -114,7 +118,8 @@ exports.getOrders = (req, res, next) => {
             res.render('shop/orders', {
                 path: '/orders',
                 docTitle: 'Your Orders',
-                orders: orders
+                orders: orders,
+                isAuthenticated: req.isLoggedIn
             });
         })
         .catch(err => console.log(err));
