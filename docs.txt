@@ -1,0 +1,19 @@
+-Trong MongoDB sử dụng $lookup aggregation operator để join-like các document với nhau. Và Mongoose - elegant mongodb object modeling 
+for node.js có thể gọi là một orm của nodejs và mongodb, nó hỗ trợ một phương thức rất tuyệt vời để join-like là populate().
+Population có thể tự động tạo đường dẫn với các document với nhau. Nó có liên kết 1 document, nhiều document,
+các đối tượng (object) đơn giản, các đối tượng lồng nhau hoặc là trả tất cả các đối tượng trong 1 lần truy vấn.
+
+-<% : Thẻ Scriptlet , thẻ này được sử dụng để nhúng mã js cho luồng điều khiển, điều kiện, không có đầu ra.
+<% for(let i = 0 ; i < 3 ; i++)  { %>
+        <p>ejs is easy</p>
+<% } %>
+
+-<%= .: Xuất giá trị vào mẫu, thoát khỏi HTML. Nó được sử dụng để nhúng mã javascript sẽ xuất ra kết quả của biểu thức có bên trong thẻ.
+<%for(let i = 0; i < 3; i++) {%>
+   <ul>
+     <li> <%= i + 1  %></li>
+  </ul>
+<%}%>
+
+-<%-.: Kết xuất mà không thoát giá trị HTML vào mẫu. Trong khi sử dụng tiệc tùng. <%=thoát HTML đi vào bộ đệm, trong khi <%-không làm điều đó.
+<%- include('../template/header')-%>  

@@ -4,18 +4,22 @@ const express = require("express");
 const bodyParser = require("body-parser");
 // const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
-const session = require('express-session'); //session library
+const session = require("express-session"); //session library
 const MongoDBStore = require("connect-mongodb-session")(session); //connect mongodb session to store session in db
 
 const errorController = require("./controller/error");
 const User = require("./models/user");
 
-const MONGODB_URI = 'mongodb+srv://thinh28042001:aHUkM4jcebhXAkBY@cluster0.bihtk.mongodb.net/myFirstDatabase';
+const MONGODB_URI =
+  "mongodb+srv://thinh28042001:aHUkM4jcebhXAkBY@cluster0.bihtk.mongodb.net/myFirstDatabase";
 
 const app = express();
-const store = new MongoDBStore({ // Create db session to store in mongodb
-    uri: MONGODB_URI,
-    collection: 'sessions'
+
+//create collection session to retrieve data session
+const store = new MongoDBStore({
+  // Create db session to store in mongodb
+  uri: MONGODB_URI,
+  collection: "sessions",
 });
 
 app.set("view engine", "ejs");
@@ -28,18 +32,35 @@ const authRoutes = require("./routes/auth");
 
 //middleware
 app.use(
-    bodyParser.urlencoded({
-        extended: false,
-    })
+  bodyParser.urlencoded({
+    extended: false,
+  })
 );
-// app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(session({ // set configure session
-    secret: 'my secret',
+
+//create session and setting configure session
+app.use(
+  session({
+    // set configure session
+    secret: "my secret",
     resave: false,
     saveUninitialized: false,
-    store: store
-}))
+    store: store,
+  })
+);
+
+//session find by id user
+app.use((req, res, next) => {
+  if (!req.session.user) {
+    return next();
+  }
+  User.findById(req.session.user._id)
+    .then((user) => {
+      req.user = user;
+      next();
+    })
+    .catch((err) => console.log(err));
+});
 
 //routers
 app.use("/admin", adminRoutes);
@@ -50,29 +71,25 @@ app.use(errorController.get404);
 
 //mongoose connect
 mongoose
-    .connect(
-        MONGODB_URI
-    )
-    .then((result) => {
-        User
-            .findOne()
-            .then((user) => {
-                if (!user) {
-                    const user = new User({
-                        name: "Thinh",
-                        email: "hoangthinhpro2001@gmail.com",
-                        cart: {
-                            items: [],
-                        },
-                    });
-                    user.save();
-                }
-            });
-        app.listen(3000);
-    })
-    .then(() => {
-        console.log("Connected Database...");
-    })
-    .catch((err) => {
-        console.log(err);
+  .connect(MONGODB_URI)
+  .then((result) => {
+    User.findOne().then((user) => {
+      if (!user) {
+        const user = new User({
+          name: "Thinh",
+          email: "hoangthinhpro2001@gmail.com",
+          cart: {
+            items: [],
+          },
+        });
+        user.save();
+      }
     });
+    app.listen(3000);
+  })
+  .then(() => {
+    console.log("Connected Database...");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
