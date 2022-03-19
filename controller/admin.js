@@ -1,11 +1,15 @@
 const Product = require("../models/product");
 
 exports.getAddProduct = (req, res, next) => {
+  if (!req.session.isLoggedIn) {
+    return res.redirect("/login");
+  }
   res.render("admin/edit-product", {
     docTitle: "Add Product",
     path: "/admin/add-product",
     editing: false,
     isAuthenticated: req.session.isLoggedIn,
+    user: req.session.user,
   });
 };
 
@@ -48,6 +52,7 @@ exports.getEditProduct = (req, res, next) => {
         editing: editMode,
         product: product,
         isAuthenticated: req.session.isLoggedIn,
+        user: req.session.user,
       });
     })
     .catch((err) => console.log(err));
@@ -86,6 +91,7 @@ exports.getProducts = (req, res, next) => {
         docTitle: "Admin Products",
         path: "/admin/products",
         isAuthenticated: req.session.isLoggedIn,
+        user: req.session.user,
       }); // render file shop.hbs
     })
     .catch((err) => console.log(err));
