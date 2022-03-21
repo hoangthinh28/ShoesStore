@@ -9,7 +9,6 @@ exports.getProducts = (req, res, next) => {
         prods: products,
         docTitle: "All Products",
         path: "/products",
-        isAuthenticated: req.session.isLoggedIn,
         user: req.session.user,
       });
     })
@@ -26,7 +25,6 @@ exports.getProduct = (req, res, next) => {
         product: product,
         docTitle: product.title,
         path: "/products",
-        isAuthenticated: req.session.isLoggedIn,
         user: req.session.user,
       });
     })
@@ -40,7 +38,6 @@ exports.getIndex = (req, res, next) => {
         prods: products,
         docTitle: "Shop",
         path: "/",
-        isAuthenticated: req.session.isLoggedIn,
         user: req.session.user,
       }); // render file shop.hbs
     })
@@ -57,7 +54,6 @@ exports.getCart = (req, res, next) => {
         path: "/cart",
         docTitle: "Your Cart",
         products: products,
-        isAuthenticated: req.session.isLoggedIn,
         user: req.session.user,
       });
     })
@@ -97,7 +93,7 @@ exports.postOrder = (req, res, next) => {
       const order = new Order({
         //
         user: {
-          name: req.user.name,
+          email: req.user.email,
           userId: req.user,
         },
         products: products,
@@ -121,7 +117,6 @@ exports.getOrders = (req, res, next) => {
         path: "/orders",
         docTitle: "Your Orders",
         orders: orders,
-        isAuthenticated: req.session.isLoggedIn,
         user: req.session.user,
       });
     })

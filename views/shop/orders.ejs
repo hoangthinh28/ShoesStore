@@ -4,7 +4,7 @@
     <body>
         <%- include('../includes/navigation.ejs') %>
             <main>
-                <% if (orders.length <= 0) { %>
+                <% if (orders.length <=0) { %>
                     <h1>Nothing here!</h1>
                     <% } else { %>
                         <ul>
@@ -13,6 +13,10 @@
                                     <h1>#
                                         <%= order._id %>
                                     </h1>
+                                    <p>Order placed: <b>
+                                            <%= order.time %>
+                                        </b>
+                                    </p>
                                     <ul>
                                         <% order.products.forEach(p=> { %>
                                             <li>
