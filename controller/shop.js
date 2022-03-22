@@ -1,6 +1,20 @@
 const Product = require("../models/product");
 const Order = require("../models/order");
 
+const fs = require("fs");
+const ejs = require("ejs");
+
+const nodemailer = require("nodemailer");
+require("dotenv").config();
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORDEMAIL,
+  },
+});
+
 exports.getProducts = (req, res, next) => {
   Product.find()
     .then((products) => {
@@ -105,6 +119,31 @@ exports.postOrder = (req, res, next) => {
       return req.user.clearCart();
     })
     .then(() => {
+      fs.readFile("views/email.ejs", "utf-8", (err, data) => {
+        //Send mail order success
+        if (err) {
+          console.log("Error: ", err);
+        }
+        Order.find({ "user.userId": req.user._id }).then((orders) => {
+          var mailOption = {
+            to: req.user.email,
+            from: "hoangrey272284@gmail.com",
+            subject: "Order succeeded",
+            html: ejs.render(data, {
+              orders: orders[orders.length - 1],
+              userId: req.user._id,
+            }),
+          };
+
+          return transporter.sendMail(mailOption, (err, data) => {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log("Sent email successful!!!");
+            }
+          });
+        });
+      });
       res.redirect("/orders");
     })
     .catch((err) => console.log(err));

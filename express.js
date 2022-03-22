@@ -12,15 +12,14 @@ const flash = require("connect-flash");
 const errorController = require("./controller/error");
 const User = require("./models/user");
 
-const MONGODB_URI =
-  "mongodb+srv://thinh28042001:aHUkM4jcebhXAkBY@cluster0.bihtk.mongodb.net/myFirstDatabase";
+require("dotenv").config();
 
 const app = express();
 
 //create collection session to retrieve data session
 const store = new MongoDBStore({
   // Create db session to store in mongodb
-  uri: MONGODB_URI,
+  uri: process.env.MONGODB_URI,
   collection: "sessions",
 });
 
@@ -83,7 +82,7 @@ app.use(errorController.get404);
 
 //mongoose connect
 mongoose
-  .connect(MONGODB_URI)
+  .connect(process.env.MONGODB_URI)
   .then((result) => {
     app.listen(3000);
   })

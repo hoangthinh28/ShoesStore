@@ -1,0 +1,26 @@
+<h1>Order Successfull</h1>
+
+<ul>
+    <h1>
+        User ID: <%= userId %>
+    </h1>
+    <ul>
+        <li>
+            <h1>
+                Order ID: <%= orders._id %>
+            </h1>
+            <p>Order placed: <b>
+                    <%= orders.time %>
+                </b>
+            </p>
+            <ul>
+                <% orders.products.forEach(p=> { %>
+                    <li>
+                        <%= p.product.title %> (
+                            <%= p.quantity %>) $
+                                <%= p.product.price * p.quantity %>
+                    </li>
+                    <% }); %>
+            </ul>
+        </li>
+    </ul>
