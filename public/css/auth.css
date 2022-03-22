@@ -1,11 +1,28 @@
 .login-form {
-    width: 20rem;
-    max-width: 90%;
-    margin: auto;
-    display: block;
+  width: 20rem;
+  max-width: 90%;
+  margin: auto;
+  display: block;
 }
 
 .form-title {
-    text-align: center;
-    text-transform: uppercase;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.user-message {
+  margin: auto;
+  width: 90%;
+  border: 1px solid rgb(142, 142, 255);
+  padding: 1rem;
+  border-radius: 3px;
+  color: red;
+  text-align: center;
+  background: #b9c9ff;
+}
+
+.user-message--error {
+  border-color: red;
+  background: rgb(255, 176, 176);
+  font-weight: 700;
 }
