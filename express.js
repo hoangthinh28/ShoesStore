@@ -39,7 +39,7 @@ app.use(
     extended: false,
   })
 );
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "/public")));
 
 //create session and setting configure session
 app.use(

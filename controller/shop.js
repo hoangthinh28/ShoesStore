@@ -119,7 +119,7 @@ exports.postOrder = (req, res, next) => {
       return req.user.clearCart();
     })
     .then(() => {
-      fs.readFile("views/email.ejs", "utf-8", (err, data) => {
+      fs.readFile("views/mail/email.ejs", "utf-8", (err, data) => {
         //Send mail order success
         if (err) {
           console.log("Error: ", err);
