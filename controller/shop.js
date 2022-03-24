@@ -155,7 +155,7 @@ exports.getOrders = (req, res, next) => {
       res.render("shop/orders", {
         path: "/orders",
         docTitle: "Your Orders",
-        orders: orders,
+        orders: orders.reverse(),
         user: req.session.user,
       });
     })
