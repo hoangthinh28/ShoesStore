@@ -14,7 +14,7 @@
                                         <%= order._id %>
                                     </h1>
                                     <p>Order placed: <b>
-                                            <%= order.time=time %>
+                                            <%= formatTime.format(order.time).replace(",", " " ) %>
                                         </b>
                                     </p>
                                     <ul>

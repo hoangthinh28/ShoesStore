@@ -194,8 +194,9 @@
                                                                                                     </td>
                                                                                                     <td
                                                                                                         style="font-size: 14px; line-height: 150%;">
-                                                                                                        <%= orders.time=time
-                                                                                                            %>
+                                                                                                        <%= formatTime.format(orders.time).replace(",", " "
+                                                                                                            ) %>
+
                                                                                                     </td>
                                                                                                 </tr>
                                                                                                 <tr>

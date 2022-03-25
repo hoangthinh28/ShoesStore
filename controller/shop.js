@@ -125,7 +125,15 @@ exports.postOrder = (req, res, next) => {
           console.log("Error: ", err);
         }
         Order.find({ "user.userId": req.user._id }).then((orders) => {
-          const time = new Date().toLocaleString();
+          let dateFormat = new Intl.DateTimeFormat("en-US", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            second: "numeric",
+            hour12: false,
+          });
           var mailOption = {
             to: req.user.email,
             from: "hoangrey272284@gmail.com",
@@ -133,7 +141,7 @@ exports.postOrder = (req, res, next) => {
             html: ejs.render(data, {
               orders: orders[orders.length - 1],
               userId: req.user._id,
-              time: time,
+              formatTime: dateFormat,
             }),
           };
 
@@ -152,16 +160,23 @@ exports.postOrder = (req, res, next) => {
 };
 
 exports.getOrders = (req, res, next) => {
+  let dateFormat = new Intl.DateTimeFormat("en-US", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: false,
+  });
   Order.find({ "user.userId": req.user._id })
     .then((orders) => {
-      const time = new Date().toLocaleString();
-      console.log(time);
       res.render("shop/orders", {
         path: "/orders",
         docTitle: "Your Orders",
         orders: orders.reverse(),
         user: req.session.user,
-        time: time,
+        formatTime: dateFormat,
       });
     })
     .catch((err) => console.log(err));
