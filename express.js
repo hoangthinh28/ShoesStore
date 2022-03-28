@@ -32,6 +32,7 @@ app.set("views", "views");
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
 const authRoutes = require("./routes/auth");
+const jsonRoutes = require("./routes/json");
 
 //middleware
 app.use(
@@ -77,6 +78,7 @@ app.use((req, res, next) => {
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
+app.use(jsonRoutes); //Route JSON
 
 app.use(errorController.get404);
 
