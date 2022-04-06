@@ -26,6 +26,11 @@ exports.getLogin = (req, res, next) => {
     path: "/login",
     docTitle: "Login",
     errorMessage: message,
+    oldInput: {
+      email: "",
+      password: "",
+    },
+    validationErrors: [],
   });
 };
 
@@ -35,10 +40,15 @@ exports.postLogin = (req, res, next) => {
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.render("auth/login", {
+    return res.status(422).render("auth/login", {
       path: "/login",
       docTitle: "Login",
       errorMessage: errors.array()[0].msg,
+      oldInput: {
+        email: email,
+        password: password,
+      },
+      validationErrors: errors.array(),
     });
   }
   User.findOne({ email: email })
@@ -87,6 +97,12 @@ exports.getSignup = (req, res, next) => {
     path: "/signup",
     docTitle: "Signup",
     errorMessage: message,
+    oldInput: {
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+    validationErrors: [],
   });
 };
 
@@ -101,6 +117,12 @@ exports.postSignup = (req, res, next) => {
       path: "/signup",
       docTitle: "Signup",
       errorMessage: errors.array()[0].msg,
+      oldInput: {
+        email: email,
+        password: password,
+        confirmPassword: req.body.confirmPassword,
+      },
+      validationErrors: errors.array(),
     });
   }
 
@@ -108,7 +130,7 @@ exports.postSignup = (req, res, next) => {
     to: email,
     from: "hoangrey272284@gmail.com",
     subject: "Signup succeeded",
-    html: "<h1>You successfully signed up!</h1>",
+    html: `<div class="mailThankYou" style="margin: 0; text-align: center; background-color: #00b9a3ad; color: white; padding: 2rem;"><h1>Welcome to Shoes Store</h1> <h3>Hi ${req.body.email}, your account registered successfully! </h3></div>`,
   };
 
   bcrypt

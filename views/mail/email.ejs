@@ -439,12 +439,12 @@
                                                                                                                 *
                                                                                                                 p.quantity
                                                                                                                 %>$
-
                                                                                                         </td>
                                                                                                     </tr>
                                                                                                 </tbody>
                                                                                             </table>
                                                                                             <p><br></p>
+
                                                                                         </td>
                                                                                     </tr>
                                                                                 </tbody>
@@ -496,6 +496,10 @@
                                                     </tr>
 
                                                     <% }); %>
+                                                        <tr>
+                                                            <td>Total: $<%= total(orders.products) %>
+                                                            </td>
+                                                        </tr>
                                             </tbody>
                                         </table>
                                     </td>

@@ -5,6 +5,7 @@ const fs = require("fs");
 const ejs = require("ejs");
 
 const nodemailer = require("nodemailer");
+const { db } = require("../models/product");
 require("dotenv").config();
 
 const transporter = nodemailer.createTransport({
@@ -16,14 +17,26 @@ const transporter = nodemailer.createTransport({
 });
 
 exports.getProducts = (req, res, next) => {
+  const truncateWords = (sentences, amount, tail) => {
+    const word = sentences.split(" ");
+    if (amount >= word.length) {
+      return sentences;
+    }
+    const truncate = word.slice(0, amount);
+    return `${truncate.join(" ")}${tail}`;
+  };
   Product.find()
     .then((products) => {
       console.log(products);
+      // let descriptionShorted = products.description;
+      // let maxLength = 30;
+      // console.log(descriptionShorted.substr(0, maxLength));
       res.render("shop/product-list", {
         prods: products,
         docTitle: "All Products",
         path: "/products",
         user: req.session.user,
+        truncateWords: truncateWords,
       });
     })
     .catch((err) => console.log(err));
@@ -46,6 +59,14 @@ exports.getProduct = (req, res, next) => {
 };
 
 exports.getIndex = (req, res, next) => {
+  const truncateWords = (sentences, amount, tail) => {
+    const word = sentences.split(" ");
+    if (amount >= word.length) {
+      return sentences;
+    }
+    const truncate = word.slice(0, amount);
+    return `${truncate.join(" ")}${tail}`;
+  };
   Product.find()
     .then((products) => {
       res.render("shop/index", {
@@ -53,6 +74,7 @@ exports.getIndex = (req, res, next) => {
         docTitle: "Shop",
         path: "/",
         user: req.session.user,
+        truncateWords: truncateWords,
       }); // render file shop.hbs
     })
     .catch((err) => console.log(err));
@@ -125,6 +147,11 @@ exports.postOrder = (req, res, next) => {
           console.log("Error: ", err);
         }
         Order.find({ "user.userId": req.user._id }).then((orders) => {
+          const grandTotal = function (arr) {
+            return arr.reduce((sum, i) => {
+              return sum + i.product.price * i.quantity;
+            }, 0);
+          };
           let dateFormat = new Intl.DateTimeFormat("en-US", {
             day: "2-digit",
             month: "short",
@@ -142,6 +169,7 @@ exports.postOrder = (req, res, next) => {
               orders: orders[orders.length - 1],
               userId: req.user._id,
               formatTime: dateFormat,
+              total: grandTotal,
             }),
           };
 
@@ -171,12 +199,18 @@ exports.getOrders = (req, res, next) => {
   });
   Order.find({ "user.userId": req.user._id })
     .then((orders) => {
+      const grandTotal = function (arr) {
+        return arr.reduce((sum, i) => {
+          return sum + i.product.price * i.quantity;
+        }, 0);
+      }; // total price in orders
       res.render("shop/orders", {
         path: "/orders",
         docTitle: "Your Orders",
         orders: orders.reverse(),
         user: req.session.user,
         formatTime: dateFormat,
+        total: grandTotal,
       });
     })
     .catch((err) => console.log(err));

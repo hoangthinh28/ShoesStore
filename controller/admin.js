@@ -82,6 +82,14 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
+  const truncateWords = (sentences, amount, tail) => {
+    const word = sentences.split(" ");
+    if (amount >= word.length) {
+      return sentences;
+    }
+    const truncate = word.slice(0, amount);
+    return `${truncate.join(" ")}${tail}`;
+  };
   Product.find()
     // .select("title price -_id") // select các trưỜng trong database
     // .populate('userId') //Join các document từ các collections khác
@@ -91,6 +99,7 @@ exports.getProducts = (req, res, next) => {
         docTitle: "Admin Products",
         path: "/admin/products",
         user: req.session.user,
+        truncateWords: truncateWords,
       }); // render file shop.hbs
     })
     .catch((err) => console.log(err));

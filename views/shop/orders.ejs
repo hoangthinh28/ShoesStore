@@ -24,7 +24,10 @@
                                                     <%= p.quantity %>) $
                                                         <%= p.product.price * p.quantity %>
                                             </li>
+
                                             <% }); %>
+                                                <li>Total: $<%= total(order.products) %>
+                                                </li>
                                     </ul>
                                 </li>
                                 <% }); %>
