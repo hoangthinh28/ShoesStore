@@ -28,10 +28,13 @@
         "mongodb": "^4.2.0",
         "mongoose": "^6.1.4",
         "mongoose-date-format": "^1.2.0",
+        "multer": "^1.4.4",
         "mysql": "^2.18.1",
         "mysql2": "^2.3.2",
         "nodemailer": "^6.7.3",
         "nodemailer-sendgrid-transport": "^0.2.0",
+        "passport": "^0.5.2",
+        "passport-google-oauth20": "^2.0.0",
         "pug": "^3.0.2",
         "sequelize": "^6.9.0"
     },

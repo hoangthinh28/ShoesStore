@@ -8,6 +8,8 @@ const nodemailer = require("nodemailer");
 const { db } = require("../models/product");
 require("dotenv").config();
 
+const ITEMS_PER_PAGE = 2;
+
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -39,7 +41,10 @@ exports.getProducts = (req, res, next) => {
         truncateWords: truncateWords,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500");
+    });
 };
 
 //Fetching a single product
@@ -55,10 +60,16 @@ exports.getProduct = (req, res, next) => {
         user: req.session.user,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500");
+    });
 };
 
 exports.getIndex = (req, res, next) => {
+  const page = +req.query.page || 1;
+  let totalItems;
+
   const truncateWords = (sentences, amount, tail) => {
     const word = sentences.split(" ");
     if (amount >= word.length) {
@@ -67,7 +78,15 @@ exports.getIndex = (req, res, next) => {
     const truncate = word.slice(0, amount);
     return `${truncate.join(" ")}${tail}`;
   };
+
   Product.find()
+    .countDocuments()
+    .then((numProducts) => {
+      totalItems = numProducts;
+      return Product.find()
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE);
+    })
     .then((products) => {
       res.render("shop/index", {
         prods: products,
@@ -75,9 +94,18 @@ exports.getIndex = (req, res, next) => {
         path: "/",
         user: req.session.user,
         truncateWords: truncateWords,
+        currentPage: page,
+        hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
       }); // render file shop.hbs
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500");
+    });
 };
 
 exports.getCart = (req, res, next) => {
@@ -93,7 +121,10 @@ exports.getCart = (req, res, next) => {
         user: req.session.user,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500");
+    });
 };
 
 exports.postCart = (req, res, next) => {
@@ -105,6 +136,10 @@ exports.postCart = (req, res, next) => {
     .then((result) => {
       console.log(result);
       res.redirect("/cart");
+    })
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500");
     });
 };
 
@@ -116,7 +151,10 @@ exports.postCartDeleteProduct = (req, res, next) => {
       console.log(result);
       res.redirect("/cart");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500");
+    });
 };
 
 exports.postOrder = (req, res, next) => {
@@ -184,7 +222,10 @@ exports.postOrder = (req, res, next) => {
       });
       res.redirect("/orders");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500");
+    });
 };
 
 exports.getOrders = (req, res, next) => {
@@ -213,5 +254,8 @@ exports.getOrders = (req, res, next) => {
         total: grandTotal,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500");
+    });
 };

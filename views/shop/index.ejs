@@ -27,8 +27,13 @@
                                 <a href="/products/<%= product._id %>" class="btn-pro">Details</a>
                                 <%- include('../includes/add-to-cart.ejs', {product: product}) %>
                             </div>
+                            <% } %>
+                                <%- include('../includes/pagination.ejs', {currentPage: currentPage, nextPage: nextPage,
+                                    previousPage: previousPage, hasNextPage: hasNextPage, hasPreviousPage:
+                                    hasPreviousPage}) %>
+
                         </article>
-                        <% } %>
+
                 </div>
                 <%} else {%>
                     <h1>No Products Found</h1>

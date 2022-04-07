@@ -28,7 +28,10 @@ exports.postAddProduct = (req, res, next) => {
       console.log(result);
       res.redirect("/");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500");
+    });
 };
 
 exports.getEditProduct = (req, res, next) => {
@@ -50,7 +53,10 @@ exports.getEditProduct = (req, res, next) => {
         user: req.session.user,
       });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500");
+    });
 };
 
 exports.postEditProduct = (req, res, next) => {
@@ -114,5 +120,8 @@ exports.postDeleteProduct = (req, res, next) => {
       console.log(rs);
       res.redirect("/admin/products");
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.redirect("/500");
+    });
 };
