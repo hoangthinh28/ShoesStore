@@ -1,23 +1,43 @@
 <section class="pagination">
-    <% if (currentPage !=1 && previousPage !=1){ %><a href="/?page=1">1</a>
-        <% } %>
+    <% var i=(Number(currentPage)> 2 ? Number(currentPage) - 1 : 1) %>
 
-            <% if (hasPreviousPage) {%>
-                <a href="?page=<%= previousPage %>">
-                    <%= previousPage %>
-                </a>
+        <% if(currentPage==1) {%>
+            <a href="/" class="disabled">First</a>
+            <% } else { %>
+                <a href="/">First</a>
                 <% } %>
-                    <a href="?page=<%= currentPage %>" class="active">
-                        <%= currentPage %>
-                    </a>
-                    <% if (hasNextPage) {%>
-                        <a href="?page=<%= nextPage %>">
-                            <%= nextPage %>
-                        </a>
+                    <% if (currentPage !=1 && previousPage !=1){ %>
+                        <a href="/?page=1">1</a>
                         <% } %>
-                            <% if (lastPage !==currentPage && nextPage !==lastPage) {%>
-                                <a href="?page=<%= lastPage %>">
-                                    <%= lastPage %>
-                                </a>
+                            <% if(i !==1) { %>
+                                <a class="disabled">...</a>
                                 <% } %>
+                                    <% if (hasPreviousPage) {%>
+                                        <a href="?page=<%= previousPage %>">
+                                            <%= previousPage %>
+                                        </a>
+                                        <% } %>
+                                            <a href="?page=<%= currentPage %>" class="active">
+                                                <%= currentPage %>
+                                            </a>
+                                            <% if (hasNextPage) {%>
+                                                <a href="?page=<%= nextPage %>">
+                                                    <%= nextPage %>
+                                                </a>
+                                                <% } %>
+                                                    <% if (i===Number(currentPage + 3 && i < lastPage)) { %>
+                                                        <a class="disabled">...</a>
+                                                        <% } %>
+                                                            <% if (lastPage !==currentPage && nextPage !==lastPage) {%>
+                                                                <a href=" ?page=<%=lastPage %>">
+                                                                    <%= lastPage %>
+                                                                </a>
+                                                                <% } %>
+                                                                    <% if (currentPage===lastPage) {%>
+                                                                        <a href="?page=<%= lastPage %>"
+                                                                            class="disabled">Last</a>
+                                                                        <% } else { %>
+                                                                            <a href="?page=<%= lastPage %>">Last</a>
+
+                                                                            <% } %>
 </section>

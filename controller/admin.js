@@ -1,5 +1,7 @@
 const Product = require("../models/product");
 
+const ITEMS_PER_PAGE = 2;
+
 exports.getAddProduct = (req, res, next) => {
   res.render("admin/edit-product", {
     docTitle: "Add Product",
@@ -88,6 +90,9 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
+  const page = +req.query.page || 1;
+  let totalProduct;
+
   const truncateWords = (sentences, amount, tail) => {
     const word = sentences.split(" ");
     if (amount >= word.length) {
@@ -99,6 +104,13 @@ exports.getProducts = (req, res, next) => {
   Product.find()
     // .select("title price -_id") // select các trưỜng trong database
     // .populate('userId') //Join các document từ các collections khác
+    .countDocuments()
+    .then((numProducts) => {
+      totalProduct = numProducts;
+      return Product.find()
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE);
+    })
     .then((products) => {
       res.render("admin/products", {
         prods: products,
@@ -106,6 +118,12 @@ exports.getProducts = (req, res, next) => {
         path: "/admin/products",
         user: req.session.user,
         truncateWords: truncateWords,
+        currentPage: page,
+        hasNextPage: ITEMS_PER_PAGE * page < totalProduct,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(totalProduct / ITEMS_PER_PAGE),
       }); // render file shop.hbs
     })
     .catch((err) => console.log(err));

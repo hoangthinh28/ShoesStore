@@ -19,6 +19,9 @@ const transporter = nodemailer.createTransport({
 });
 
 exports.getProducts = (req, res, next) => {
+  const page = +req.query.page || 1;
+  let totalItems;
+
   const truncateWords = (sentences, amount, tail) => {
     const word = sentences.split(" ");
     if (amount >= word.length) {
@@ -27,18 +30,29 @@ exports.getProducts = (req, res, next) => {
     const truncate = word.slice(0, amount);
     return `${truncate.join(" ")}${tail}`;
   };
+
   Product.find()
+    .countDocuments()
+    .then((numProducts) => {
+      totalItems = numProducts;
+      return Product.find()
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE);
+    })
     .then((products) => {
       console.log(products);
-      // let descriptionShorted = products.description;
-      // let maxLength = 30;
-      // console.log(descriptionShorted.substr(0, maxLength));
       res.render("shop/product-list", {
         prods: products,
         docTitle: "All Products",
         path: "/products",
         user: req.session.user,
         truncateWords: truncateWords,
+        currentPage: page,
+        hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
       });
     })
     .catch((err) => {

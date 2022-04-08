@@ -131,7 +131,7 @@ main {
 
 .card__image img {
   width: 100%;
-  text-align: center;
+  margin: 0 1.5rem;
 }
 
 .card__actions {
@@ -200,4 +200,8 @@ main {
 .pagination a.active {
   background-color: #00695c;
   color: white;
+}
+
+.pagination a.disabled {
+  pointer-events: none;
 }
