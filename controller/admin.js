@@ -16,6 +16,7 @@ exports.postAddProduct = (req, res, next) => {
   const imageURL = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
+  console.log(imageURL);
   const product = new Product({
     title: title,
     price: price,
@@ -130,16 +131,14 @@ exports.getProducts = (req, res, next) => {
 };
 
 //delete product
-exports.postDeleteProduct = (req, res, next) => {
-  const prodId = req.body.productId;
+exports.deleteProduct = (req, res, next) => {
+  const prodId = req.params.productId;
   Product.deleteOne({ _id: prodId, userId: req.user._id }) //remove id product in database
     .then((rs) => {
       console.log("DELETE SUCCESS");
-      console.log(rs);
-      res.redirect("/admin/products");
+      res.json({ message: "Success!" });
     })
     .catch((err) => {
-      console.log(err);
-      res.redirect("/500");
+      res.json({ message: "Delete product failed!" });
     });
 };
